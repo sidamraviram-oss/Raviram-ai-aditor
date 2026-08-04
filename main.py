@@ -164,3 +164,20 @@ async def edit_and_generate_video(
 
     except Exception as e:
         return {"status": "Error", "message": str(e)}
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
+from fastapi import Depends, HTTPException, status
+
+security = HTTPBasic()
+
+# ఇక్కడ మీకు నచ్చిన యూజర్ నేమ్ మరియు పాస్‌వర్డ్ పెట్టుకోండి
+ADMIN_USER = "admin"
+ADMIN_PASS = "raviram0536"
+
+def verify_credentials(credentials: HTTPBasicCredentials = Depends(security)):
+    if credentials.username != ADMIN_USER or credentials.password != ADMIN_PASS:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Basic"},
+        )
+    return credentials.username
