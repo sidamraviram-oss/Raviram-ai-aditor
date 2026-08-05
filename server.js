@@ -12,12 +12,11 @@ app.use(fileUpload());
 const ADMIN_SECRET_KEY = "raviram0536";
 const SECURE_PHONE_NUMBER = "9502981109";
 const SECURE_UPI_ID = `${SECURE_PHONE_NUMBER}@paytm`;
-const OWNER_NAME = "Raviram";
+const OWNER_NAME = "Film Maker & Editor";
 
 const ADMIN_EMAIL = "raviram@ai.com";
 const ADMIN_PASS = "raviram0536";
 
-// హ్యాకింగ్ సింబల్స్ లేదా కోడ్ (<, >, / మొదలైనవి) ఎంట్రీలను బ్లాక్ చేసే సెక్యూరిటీ ఫంక్షన్
 function validateAndSanitizeInput(text) {
     if (!text) return "";
     
@@ -73,7 +72,7 @@ function calculateAmount(minutes) {
 
 app.get("/", (req, res) => {
     res.json({
-        welcome: "Welcome to Raviram Secure AI Video & Audio Editor!",
+        welcome: `Welcome to ${OWNER_NAME}'s Official Platform & AI Video Generator!`,
         pricing_list: [
             { duration: "1 Minute", price: "₹59" },
             { duration: "3 Minutes", price: "₹149" },
@@ -117,7 +116,7 @@ app.post("/edit-and-generate-video/", async (req, res) => {
         let amount = calculateAmount(video_minutes);
 
         if (secret_key === ADMIN_SECRET_KEY || user_email === ADMIN_EMAIL) {
-            let role = "Boss (Raviram)";
+            let role = "Boss (Admin)";
             let status = "Success (Free Access)";
 
             let logData = {
@@ -131,13 +130,13 @@ app.post("/edit-and-generate-video/", async (req, res) => {
             return res.json({
                 status: "Success",
                 role: role,
-                message: `Welcome Boss Raviram (${user_email})! Free access granted securely.`,
+                message: `Welcome Boss (${user_email})! Free access granted securely.`,
                 payment_required: false,
-                final_edited_video: "https://ai-video-generator.local/raviram_secure_output.mp4"
+                final_edited_video: "https://ai-video-generator.local/secure_output.mp4"
             });
         }
 
-        let upiPayLink = `upi://pay?pa=${SECURE_UPI_ID}&pn=${OWNER_NAME}&am=${amount}&cu=INR`;
+        let upiPayLink = `upi://pay?pa=${SECURE_UPI_ID}&pn=${encodeURIComponent(OWNER_NAME)}&am=${amount}&cu=INR`;
         let qrCodeDataUrl = await qrcode.toDataURL(upiPayLink);
 
         let status = "Payment Required";
